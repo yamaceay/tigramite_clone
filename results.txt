@@ -1,0 +1,130 @@
+PARCORR
+
+Model =  1
+        Rate =  0.08
+Model =  2
+        Rate =  0.04
+Model =  11
+        Rate =  1.0
+Model =  12
+        Rate =  0.24
+
+GDPC
+
+Model =  1
+        Rate =  0.09
+Model =  2
+        Rate =  0.05
+Model =  11
+        Rate =  0.04
+Model =  12
+        Rate =  0.13
+
+--------------------
+
+PARCORR n = 100
+
+Model =  14
+        Rate =  0.52
+
+PARCORR n = 250
+
+Model =  14
+        Rate =  0.89
+
+GDPC n = 100
+
+Model =  14
+        Rate =  0.49
+
+GDPC n = 250
+
+Model =  14
+        Rate =  0.78
+
+--------------------
+
+PARCORR 
+
+# no causal links, but temporal (univariate) rel.
+
+Model =  15
+        Rate =  0.51
+
+GDPC
+
+Model =  15
+        Rate =  0.59
+
+
+
+
+
+
+RESULTS
+
+Model 1: No causality
+Model 2: A fork X2 -> X1 and X2 -> X3
+Model 11: A non-linear fork X2**2 -> X1 and -X2**2 -> X3
+Model 12: Multiplicative rel, X1 ~ X2 * noise, X3 ~ X2 * noise
+Model 14: Weak causality due to low factor, X1 -> X3
+Model 15: Univariate temporal relationship, X1(t - 1) -> X1(t), X3(t - 1) -> X3(t) 
+Model 16: Deterministic variable X1 = f(X2) and non-deterministic X2 -> X3
+Model 17: Selection bias, also only the data points are selected which satisfy: X1, X3 > 0
+Model 18: Conditioned (fork) common cause X2 = L, so that L -> X1 and L -> X3
+
+Model = 1, n_obs = 100
+Rate = {'ParCorr': 0.08, 'GPDC': 0.09, 'CMIknn': 0.11}
+Model = 1, n_obs = 250
+Rate = {'ParCorr': 0.04, 'GPDC': 0.02, 'CMIknn': 0.01}
+
+# Takeaway: In case of non-causal relationships, 
+the more observations in ParCorr, the higher the power of the model
+
+Model = 2, n_obs = 100
+Rate = {'ParCorr': 0.04, 'GPDC': 0.05, 'CMIknn': 0.03}
+
+# Takeaway: Linear causal relationships can be detected by all models, but 
+ParCorr is performance-wise faster and better.
+
+Model = 11, n_obs = 100
+Rate = {'ParCorr': 1.0, 'GPDC': 0.04, 'CMIknn': 0.03}
+
+# Takeaway: ParCorr is not good at detecting the non-linear relationships, 
+instead use other alternatives
+
+Model = 12, n_obs = 100
+Rate = {'ParCorr': 0.24, 'GPDC': 0.13, 'CMIknn': 0.07}
+
+# Takeaway: In case of multiplicative causal relationships, ParCorr is less 
+performant than GDPC or CMI
+
+Model = 14, n_obs = 100
+Rate = {'ParCorr': 0.55, 'GPDC': 0.45, 'CMIknn': 0.3}
+
+# Takeaway: All models fail at detecting weak causal relationships
+
+Model = 14, n_obs = 250
+Rate = {'ParCorr': 0.88, 'GPDC': 0.79, 'CMIknn': 0.6}
+
+# Takeaway: And the error rates might increase, the higher the sample size 
+
+Model = 15, n_obs = 100
+Rate = {'ParCorr': 0.58, 'GPDC': 0.65, 'CMIknn': 0.43}
+
+# Takeaway: All models fail at detecting the time-series relationships
+
+Model = 16, n_obs = 100
+Rate = {'ParCorr': 0.01, 'GPDC': 0.03, 'CMIknn': 0.16}
+
+# Takeaway: If there is a deterministic linear relationship, ParCorr would be the best choice.
+
+Model = 17, n_obs = 100
+Rate = {'ParCorr': 0.85, 'GPDC': 0.97, 'CMIknn': 0.71}
+
+# Takeaway: The selection bias leads to huge errors in the test data.
+
+Model = 18, n_obs = 100
+Rate = {'ParCorr': 0.59, 'GPDC': 0.53, 'CMIknn': 0.27}
+
+# Takeaway: If the common cause is fixed on some value, then CMI is the way to go. 
